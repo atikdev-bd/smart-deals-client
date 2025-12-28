@@ -5,6 +5,8 @@ import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import MyProducts from "../components/MyProducts/MyProducts";
 import BidsProduct from "../components/BidsProduct/BidsProduct";
+import PrivetRoutes from "./PrivetRoutes";
+import CreateProduct from "../components/CreateProduct/CreateProduct";
 
 export const router = createBrowserRouter([
   {
@@ -30,8 +32,22 @@ export const router = createBrowserRouter([
         Component: MyProducts,
       },
       {
+        path: "/createProduct",
+        element: (
+          <PrivetRoutes>
+            {" "}
+            <CreateProduct />{" "}
+          </PrivetRoutes>
+        ),
+      },
+      {
         path: "/myBids",
-        Component: BidsProduct,
+        element: (
+          <PrivetRoutes>
+            {" "}
+            <BidsProduct />{" "}
+          </PrivetRoutes>
+        ),
       },
     ],
   },

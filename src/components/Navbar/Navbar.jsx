@@ -40,7 +40,7 @@ const Navbar = () => {
       )}
       <li>
         {" "}
-        <NavLink to="/about">Create Product</NavLink>
+        <NavLink to="/createProduct">Create Product</NavLink>
       </li>
     </>
   );
