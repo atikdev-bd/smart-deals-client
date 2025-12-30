@@ -7,6 +7,7 @@ import MyProducts from "../components/MyProducts/MyProducts";
 import BidsProduct from "../components/BidsProduct/BidsProduct";
 import PrivetRoutes from "./PrivetRoutes";
 import CreateProduct from "../components/CreateProduct/CreateProduct";
+import ProductDetails from "../components/ProductDetails/ProductDetails";
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +49,12 @@ export const router = createBrowserRouter([
             <BidsProduct />{" "}
           </PrivetRoutes>
         ),
+      },
+      {
+        path: "/product/:id",
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/product/${params.id}`),
+        Component: ProductDetails,
       },
     ],
   },

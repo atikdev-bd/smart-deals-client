@@ -1,6 +1,8 @@
 import React from "react";
+import { Link } from "react-router";
 
 const ProductCard = ({ product }) => {
+  const { _id } = product;
   console.log(product);
   return (
     <div className="card bg-base-100 w-full mt-16 shadow-sm hover:shadow-xl duration-300">
@@ -19,7 +21,9 @@ const ProductCard = ({ product }) => {
           Price: <span className="font-bold text-lg">${product.price_max}</span>
         </p>
         <div className="card-actions">
-          <button className="btn btn-primary w-full">Buy Now</button>
+          <Link to={`/product/${_id}`} className="btn btn-primary w-full">
+            View Details
+          </Link>
         </div>
       </div>
     </div>
