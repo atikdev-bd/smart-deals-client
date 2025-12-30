@@ -5,13 +5,27 @@ import { AuthContext } from "../../context/AuthContext";
 
 const ProductDetails = () => {
   const { user } = useContext(AuthContext);
-  console.log(user);
-
+  const openBidsModal = useRef(null);
   const [bidsProduct, setBidsProduct] = useState([]);
-  console.log(bidsProduct);
 
-  const { _id: productId, title, price_max, min_price } = useLoaderData();
+  const {
+    _id: productId,
+    title,
+    price_max,
+    min_price,
+    condition,
+    price_min,
+    email,
+    location,
+    seller_name,
+    description,
+    seller_contact,
+    usage,
+    created_at,
+    category,
+  } = useLoaderData();
 
+  /// use useEffect of get specific bids data by id
   useEffect(() => {
     fetch(`http://localhost:3000/bids/${productId}`)
       .then((res) => res.json())
@@ -21,18 +35,17 @@ const ProductDetails = () => {
       });
   }, [productId]);
 
-  const openBidsModal = useRef(null);
-
+  //  use function for showModal
   const handleOpenBidsModal = () => {
     openBidsModal.current.showModal();
   };
 
+  // use function for get from information
   const handleBidsSubmit = (e) => {
     e.preventDefault();
 
     const name = e.target.name.value;
     const email = e.target.email.value;
-
     const price = e.target.price.value;
     const contract = e.target.number.value;
     const ProductsBids = {
@@ -46,8 +59,10 @@ const ProductDetails = () => {
       product_min_price: min_price,
       status: "Pending",
     };
+
     e.target.reset();
 
+    // save data to server side to mongodb using Post method
     fetch("http://localhost:3000/bids", {
       method: "POST",
       headers: {
@@ -70,7 +85,6 @@ const ProductDetails = () => {
           setBidsProduct(sortedBidsPrice);
         }
       });
-    console.log(ProductsBids);
   };
 
   return (
@@ -99,21 +113,18 @@ const ProductDetails = () => {
                   <span className="font-medium text-purple-600">
                     Condition:
                   </span>{" "}
-                  New
+                  {condition}
                 </p>
                 <p>
                   <span className="font-medium text-purple-600">
                     Usage Time:
                   </span>{" "}
-                  3 Month
+                  {usage}
                 </p>
               </div>
 
               <p className="text-sm text-gray-600 leading-relaxed">
-                It is a long established fact that a reader will be distracted
-                by the readable content of a page when looking at its layout.
-                The point of using Lorem Ipsum is that it has a more-or-less
-                normal distribution of letters.
+                {description}
               </p>
             </div>
           </div>
@@ -122,18 +133,18 @@ const ProductDetails = () => {
           <div className="space-y-4">
             {/* Title */}
             <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
-              Yamaha Fz Guitar For Sale
+              {title}
             </h1>
 
             {/* Category */}
             <span className="inline-block text-xs bg-purple-100 text-purple-600 px-3 py-1 rounded-full">
-              Art And Hobbies
+              {category}
             </span>
 
             {/* Price Card */}
             <div className="bg-white shadow rounded-xl p-4">
               <p className="text-lg sm:text-xl font-semibold text-green-600">
-                $22.5 - 30
+                {` $${price_min} - ${price_max}`}
               </p>
               <p className="text-xs text-gray-500">Price starts from</p>
             </div>
@@ -144,11 +155,10 @@ const ProductDetails = () => {
                 Product Details
               </h3>
               <p className="text-sm text-gray-600 break-all">
-                <span className="font-medium">Product ID:</span>{" "}
-                68f735ae2174ca36e8c82f4
+                <span className="font-medium">Product ID:</span> {productId}
               </p>
               <p className="text-sm text-gray-600">
-                <span className="font-medium">Posted:</span> 10/19/2024
+                <span className="font-medium">Posted:</span> {created_at}
               </p>
             </div>
 
@@ -161,20 +171,17 @@ const ProductDetails = () => {
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 bg-gray-300 rounded-full" />
                 <div>
-                  <p className="font-medium text-gray-800">Sara Chen</p>
-                  <p className="text-xs text-gray-500">
-                    crafts.by.sara@shop.net
-                  </p>
+                  <p className="font-medium text-gray-800">{seller_name}</p>
+                  <p className="text-xs text-gray-500">{email}</p>
                 </div>
               </div>
 
               <div className="space-y-1 text-sm text-gray-600">
                 <p>
-                  <span className="font-medium">Location:</span> Los Angeles, CA
+                  <span className="font-medium">Location:</span> {location}
                 </p>
                 <p>
-                  <span className="font-medium">Contact:</span>{" "}
-                  sara_chen_contact
+                  <span className="font-medium">Contact:</span> {seller_contact}
                 </p>
               </div>
 
@@ -322,10 +329,12 @@ const ProductDetails = () => {
 
               {/* Table Body */}
               <tbody className="divide-y">
-                {bidsProduct.map((bids) => (
+                {bidsProduct.map((bids, index) => (
                   <tr className="hover:bg-gray-50 transition">
                     {/* SL No */}
-                    <td className="px-4 py-3 text-sm text-gray-700"></td>
+                    <td className="px-4 py-3 text-sm text-gray-700">
+                      {index + 1}
+                    </td>
 
                     {/* Product */}
                     <td className="px-4 py-3">
@@ -333,9 +342,9 @@ const ProductDetails = () => {
                         <div className="w-10 h-10 bg-gray-200 rounded-md" />
                         <div>
                           <p className="text-sm font-medium text-gray-800">
-                            {bids.product_name}
+                            {bids?.product_name}
                           </p>
-                          <p className="text-xs text-gray-500">{price_max}</p>
+                          <p className="text-xs text-gray-500">{`$${price_min} - ${price_max}`}</p>
                         </div>
                       </div>
                     </td>
@@ -346,16 +355,16 @@ const ProductDetails = () => {
                         <div className="w-8 h-8 bg-gray-300 rounded-full">
                           <img
                             className="w-28 rounded-full"
-                            src={bids.buyer_image}
+                            src={bids?.buyer_image}
                             alt=""
                           />
                         </div>
                         <div>
                           <p className="text-sm font-medium text-gray-800">
-                            {bids.buyer_name}
+                            {bids?.buyer_name}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {bids.buyer_email}
+                            {bids?.buyer_email}
                           </p>
                         </div>
                       </div>
@@ -363,9 +372,8 @@ const ProductDetails = () => {
 
                     {/* Bid Price */}
                     <td className="px-4 py-3 text-sm font-medium text-gray-800">
-                      {bids.bid_price}
+                      {bids?.bid_price}
                     </td>
-
                     {/* Actions */}
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-2">
