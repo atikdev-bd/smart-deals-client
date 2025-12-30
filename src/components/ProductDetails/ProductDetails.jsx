@@ -10,7 +10,7 @@ const ProductDetails = () => {
   const [bidsProduct, setBidsProduct] = useState([]);
   console.log(bidsProduct);
 
-  const { _id: productId, title, price_max } = useLoaderData();
+  const { _id: productId, title, price_max, min_price } = useLoaderData();
 
   useEffect(() => {
     fetch(`http://localhost:3000/bids/${productId}`)
@@ -32,6 +32,7 @@ const ProductDetails = () => {
 
     const name = e.target.name.value;
     const email = e.target.email.value;
+
     const price = e.target.price.value;
     const contract = e.target.number.value;
     const ProductsBids = {
@@ -42,6 +43,7 @@ const ProductDetails = () => {
       buyer_image: user?.photoURL,
       buyer_email: email,
       bid_price: price,
+      product_min_price: min_price,
       status: "Pending",
     };
     e.target.reset();

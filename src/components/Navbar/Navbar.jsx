@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
 import { useContext } from "react";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const { user, signOutUser } = useContext(AuthContext);
@@ -8,7 +9,13 @@ const Navbar = () => {
   const handleSignOUt = () => {
     signOutUser()
       .then(() => {
-        alert("User logged out successfully");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Logout Successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       })
       .catch((error) => {
         // An error happened.
@@ -72,12 +79,12 @@ const Navbar = () => {
             {links}
           </ul>
         </div>
-        <a className=" font-bold  lg:text-4xl">
+        <a className=" font-bold   md:text-3xl lg:text-4xl">
           Smart <span className="text-primary">Deals</span>
         </a>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{links}</ul>
+        <ul className="menu menu-horizontal px-1 text-[16px]">{links}</ul>
       </div>
       <div className="navbar-end space-x-4">
         {user ? (

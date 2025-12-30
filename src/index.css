@@ -20,3 +20,7 @@
 .text-primary {
   @apply bg-gradient-to-r from-[#632EE3] to-[#9F62F2] bg-clip-text text-transparent;
 }
+ul a.active {
+  border-bottom: 2px solid #632ee3;
+  color: #632ee3;
+}
