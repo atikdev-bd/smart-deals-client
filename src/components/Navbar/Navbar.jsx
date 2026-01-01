@@ -79,12 +79,12 @@ const Navbar = () => {
             {links}
           </ul>
         </div>
-        <a className=" font-bold   md:text-3xl lg:text-4xl">
+        <a className=" font-bold font-mono   md:text-3xl lg:text-4xl">
           Smart <span className="text-primary">Deals</span>
         </a>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 text-[16px]">{links}</ul>
+        <ul className="menu menu-horizontal px-1 font-mono text-[17px]">{links}</ul>
       </div>
       <div className="navbar-end space-x-4">
         {user ? (

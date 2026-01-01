@@ -34,7 +34,10 @@ const BidsProduct = () => {
 
   return (
     <div>
-      <h1>{myBids.length}</h1>
+      <h1 className="text-4xl text-center mt-6 font-bold mb-2 ">
+        MY Bids:
+        <span className="text-primary">{myBids.length}</span>
+      </h1>
       <div className="bg-white shadow rounded-xl overflow-x-auto">
         <table className="min-w-full border-collapse">
           {/* Table Head */}
