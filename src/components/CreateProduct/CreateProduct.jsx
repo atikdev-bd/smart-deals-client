@@ -70,7 +70,7 @@ const CreateProduct = () => {
       description,
     };
 
-    console.log(ProductInfo);
+    
   };
 
   return (

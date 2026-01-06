@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const ProductCard = ({ product }) => {
   const { _id } = product;
-  console.log(product);
+  // console.log(product);
   return (
     <div className="card bg-base-100 w-full mt-16 shadow-sm hover:shadow-xl duration-300">
       <figure>
