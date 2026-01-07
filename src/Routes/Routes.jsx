@@ -59,7 +59,11 @@ export const router = createBrowserRouter([
       {
         path: "/product/:id",
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/product/${params.id}`),
+          fetch(`http://localhost:3000/product/${params.id}`, {
+            headers: {
+              authorization: `Berar ${localStorage.getItem("token")}`,
+            },
+          }),
         element: (
           <PrivetRoutes>
             <ProductDetails></ProductDetails>

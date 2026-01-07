@@ -10,7 +10,7 @@ const recentProductPromise = fetch(
 const Home = () => {
   const user = useContext(AuthContext);
 
-  // console.log(user.user);
+  console.log(user.user);
 
   return (
     <div>
