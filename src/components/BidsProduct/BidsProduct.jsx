@@ -1,38 +1,58 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import useAuth from "../../Hooks/useAuth";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const BidsProduct = () => {
-  const { user } = useContext(AuthContext);
-  console.log(user);
+  const { user } = useAuth();
+
+  const axiosSecure = useAxiosSecure();
+
+  // console.log(user);
   const [myBids, setMyBids] = useState([]);
-  console.log(myBids);
+  // console.log(myBids);
+  // useEffect(() => {
+  //   fetch(`http://localhost:3000/bids?email=${user?.email}`, {
+  //     headers: {
+  //       authorization: `Bearer sdfafdasfdsafdsa`,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setMyBids(data);
+  //     });
+  // }, [user]);
+
   useEffect(() => {
-    fetch(`http://localhost:3000/bids?email=${user?.email}`, {
-      headers: {
-        authorization: `Bearer ${user.accessToken}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setMyBids(data);
+    if (user) {
+      axiosSecure(`/bids?email=${user?.email}`).then((data) => {
+        setMyBids(data.data);
       });
-  }, [user]);
+    }
+  }, [user, axiosSecure]);
 
   const handleBidDelete = (id) => {
-    fetch(`http://localhost:3000/bids/${id} `, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
+    axiosSecure
+      .delete(`/bids/${id} `)
       .then((data) => {
-        console.log(data);
-        if (data.deletedCount) {
-          alert("Bids Deleted Successfully");
+        if (data?.data?.deletedCount) {
           const remainingBids = myBids.filter((bid) => bid._id !== id);
           const sortedBids = remainingBids.sort(
-            (a, b) => b.bid_price - a.bid_price
+            (a, b) => b.bid_price - a.bid_price,
           );
           setMyBids(sortedBids);
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Bids Deleted Successfully",
+            showConfirmButton: false,
+            timer: 1000,
+          });
         }
+      })
+      .then(() => {
+    
       });
   };
 
@@ -71,7 +91,7 @@ const BidsProduct = () => {
           {/* Table Body */}
           <tbody className="divide-y">
             {myBids.map((bid, index) => (
-              <tr className="hover:bg-gray-50 transition">
+              <tr key={bid?._id} className="hover:bg-gray-50 transition">
                 <td className="px-4 py-3 text-sm text-gray-700">{index + 1}</td>
 
                 {/* Product */}

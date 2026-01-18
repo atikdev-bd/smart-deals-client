@@ -1,10 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import { MdClose } from "react-icons/md";
 import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
+import useAuth from "../../Hooks/useAuth";
 
 const ProductDetails = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
+
   const openBidsModal = useRef(null);
   const [bidsProduct, setBidsProduct] = useState([]);
 
@@ -25,15 +28,23 @@ const ProductDetails = () => {
     category,
   } = useLoaderData();
 
-  /// use useEffect of get specific bids data by id
+  /// get data with Axios
+
   useEffect(() => {
-    fetch(`http://localhost:3000/bids/${productId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setBidsProduct(data);
-      });
+    axios(`http://localhost:3000/bids/${productId}`).then((data) => {
+      setBidsProduct(data?.data);
+    });
   }, [productId]);
+
+  /// use useEffect of get specific bids data by id
+  // useEffect(() => {
+  //   fetch(`http://localhost:3000/bids/${productId}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       setBidsProduct(data);
+  //     });
+  // }, [productId]);
 
   //  use function for showModal
   const handleOpenBidsModal = () => {
@@ -73,14 +84,13 @@ const ProductDetails = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.buyer_image);
         if (data.insertedId) {
           alert("Bids Successfully");
           openBidsModal.current.close();
           ProductsBids._id = data.insertedId;
           const newBids = [...bidsProduct, ProductsBids];
           const sortedBidsPrice = newBids.sort(
-            (a, b) => b.bid_price - a.bid_price
+            (a, b) => b.bid_price - a.bid_price,
           );
           setBidsProduct(sortedBidsPrice);
         }
@@ -330,7 +340,7 @@ const ProductDetails = () => {
               {/* Table Body */}
               <tbody className="divide-y">
                 {bidsProduct.map((bids, index) => (
-                  <tr className="hover:bg-gray-50 transition">
+                  <tr key={bids?._id} className="hover:bg-gray-50 transition">
                     {/* SL No */}
                     <td className="px-4 py-3 text-sm text-gray-700">
                       {index + 1}

@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
-import { Link,  useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
+import useAuth from "../../Hooks/useAuth";
 
 const Login = () => {
-  const { googleSignIn } = useContext(AuthContext);
-
+  const { googleSignIn } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,7 +13,6 @@ const Login = () => {
   const handleGoogleSignIn = () => {
     googleSignIn()
       .then((result) => {
-        console.log(result);
         const userInfo = {
           name: result.user.displayName,
           email: result.user.email,
@@ -28,15 +26,12 @@ const Login = () => {
           body: JSON.stringify(userInfo),
         })
           .then((res) => res.json())
-          .then((data) => {
+          .then(() => {
             navigate(from, { replace: true });
-            console.log(data.message);
           });
       })
 
-      .catch((error) => {
-        console.log(error.message);
-      });
+      .catch(() => {});
     // Implement Google Sign-In logic here
   };
 

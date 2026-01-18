@@ -17,9 +17,9 @@ const Navbar = () => {
           timer: 1500,
         });
       })
-      .catch((error) => {
+      .catch(() => {
         // An error happened.
-        console.log(error.message);
+    
       });
   };
 

@@ -1,5 +1,6 @@
-import React from "react";
 import { Link } from "react-router";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const CreateProduct = () => {
   const option = (
@@ -38,39 +39,77 @@ const CreateProduct = () => {
     </>
   );
 
+  const axiosSecure = useAxiosSecure();
+
   const handleCreateProduct = (e) => {
     e.preventDefault();
     const title = e.target.title.value;
     const category = e.target.category.value;
-    const minPrice = e.target.minPrice.value;
-    const maxPrice = e.target.maxPrice.value;
+    const price_min = e.target.minPrice.value;
+    const price_max = e.target.maxPrice.value;
+    parseInt(price_max);
+    parseInt(price_min);
+
     const condition = e.target.condition.value;
-    const productImg = e.target.url.value;
-    const contact = e.target.contact.value;
-    const sellerName = e.target.sellerName.value;
-    const sellerEmail = e.target.sellerEmail.value;
-    const sellerImage = e.target.sellerImage.value;
+    const image = e.target.url.value;
+    const seller_contact = e.target.contact.value;
+    const seller_name = e.target.sellerName.value;
+    const email = e.target.sellerEmail.value;
+    const seller_image = e.target.sellerImage.value;
     const location = e.target.location.value;
-    const usingTime = e.target.usingTime.value;
+    const usage = e.target.usingTime.value;
     const description = e.target.description.value;
+    const status = "pending";
+    const created_at = new Date().toLocaleString();
 
     const ProductInfo = {
       title,
       category,
-      minPrice,
-      maxPrice,
+      price_min,
+      price_max,
       condition,
-      productImg,
-      sellerName,
-      contact,
-      sellerEmail,
-      sellerImage,
+      image,
+      seller_name,
+      seller_contact,
+      email,
+      seller_image,
       location,
-      usingTime,
+      usage,
       description,
+      created_at,
+      status,
     };
 
-    
+ 
+
+    //   axios.post("http://localhost:3000/products", ProductInfo).then((data) => {
+    //     if (data?.data?.insertedId) {
+    //       // console.log(data.data);
+    //       Swal.fire({
+    //         position: "top-end",
+    //         icon: "success",
+    //         title: "Product Created  Successfully",
+    //         showConfirmButton: false,
+    //         timer: 1000,
+    //       });
+    //     }
+    //     // e.target.reset();
+    //   });
+    // };
+
+    axiosSecure.post("/products", ProductInfo).then((data) => {
+      if (data?.data?.insertedId) {
+      
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Product Created  Successfully",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      }
+      // e.target.reset();
+    });
   };
 
   return (

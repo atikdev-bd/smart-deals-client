@@ -31,11 +31,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "/myProducts",
-        Component: MyProducts,
+        element: (
+          <PrivetRoutes>
+            <MyProducts></MyProducts>
+          </PrivetRoutes>
+        ),
       },
       {
         path: "/allProducts",
-        loader: () => fetch("http://localhost:3000/products"),
+        loader: () => fetch("http://localhost:3000/allProducts"),
         Component: AllProducts,
       },
       {
@@ -59,11 +63,7 @@ export const router = createBrowserRouter([
       {
         path: "/product/:id",
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/product/${params.id}`, {
-            headers: {
-              authorization: `Berar ${localStorage.getItem("token")}`,
-            },
-          }),
+          fetch(`http://localhost:3000/product/${params.id}`),
         element: (
           <PrivetRoutes>
             <ProductDetails></ProductDetails>
